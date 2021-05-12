@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Parky.api.Data;
 
 namespace Parky.api
 {
@@ -25,6 +27,11 @@ namespace Parky.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //add the sql db context (using Entity framework here, so two nuget packages installed to allow for this to be used, EntityFrameworkCore and then the SqlServer extensions for Entity Framework)
+            //the connection string can be found in the appsettings.json file
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddControllers();
         }
 
