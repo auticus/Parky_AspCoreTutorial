@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Parky.api.Data;
+using Parky.api.Repository;
+using Parky.api.Repository.Interfaces;
 
 namespace Parky.api
 {
@@ -32,6 +34,7 @@ namespace Parky.api
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddControllers();
         }
 

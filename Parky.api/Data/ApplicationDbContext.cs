@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Parky.api.Models;
+using Parky.api.Models.DTOs;
 
 namespace Parky.api.Data
 {
@@ -10,6 +11,6 @@ namespace Parky.api.Data
             
         }
 
-        public DbSet<NationalPark> NationalParks { get; set; }
+        public DbSet<NationalParkDTO> NationalParks { get; set; }
     }
 }
