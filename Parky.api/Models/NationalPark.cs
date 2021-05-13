@@ -20,6 +20,8 @@ namespace Parky.api.Models
 
         public NationalParkDTO ToDTO()
         {
+            //developer note: yes we can use automapper for this - but i am not fond of 3rd party software reliance - especially for something like mapping which is
+            //trivial. You are free to do what you wish
             var park = new NationalParkDTO()
             {
                 Id = Id,

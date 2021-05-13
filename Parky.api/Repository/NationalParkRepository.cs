@@ -16,12 +16,12 @@ namespace Parky.api.Repository
             _db = db;
         }
 
-        public ICollection<NationalParkDTO> GetNationalParks()
+        public ICollection<NationalPark> GetNationalParks()
         {
             return _db.NationalParks.OrderBy(park => park.Name).ToList();
         }
 
-        public NationalParkDTO GetNationalPark(int nationalParkId)
+        public NationalPark GetNationalPark(int nationalParkId)
         {
             return _db.NationalParks.FirstOrDefault(park => park.Id == nationalParkId);
         }
@@ -38,27 +38,24 @@ namespace Parky.api.Repository
             return value;
         }
 
-        public bool CreateNationalPark(NationalParkDTO nationalPark)
+        public bool CreateNationalPark(NationalPark nationalPark)
         {
             _db.NationalParks.Add(nationalPark);
             return Save();
         }
 
-        public bool UpdateNationalPark(NationalParkDTO nationalPark)
+        public bool UpdateNationalPark(NationalPark nationalPark)
         {
             _db.NationalParks.Update(nationalPark);
             return Save();
         }
 
-        public bool DeleteNationalPark(NationalParkDTO nationalPark)
+        public bool DeleteNationalPark(NationalPark nationalPark)
         {
             _db.NationalParks.Remove(nationalPark);
             return Save();
         }
 
-        public bool Save()
-        {
-            return _db.SaveChanges() >= 0 ? true : false;
-        }
+        public bool Save() => _db.SaveChanges() >= 0;
     }
 }

@@ -8,9 +8,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Parky.api.Data;
 using Parky.api.Repository;
 using Parky.api.Repository.Interfaces;
@@ -35,6 +38,27 @@ namespace Parky.api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("ParkyOpenAPISpec", 
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title="Parky API",
+                        Version="1.0",
+                        Description="API Tutorial",
+                        Contact = new OpenApiContact()
+                        {
+                            Email= "auticus.daerk@gmail.com",
+                            Name="Auticus Daerk",
+                            Url = new Uri("https://www.github.com/auticus")
+                        }
+                        //can get even more detailed here with extensions to add logos, etc... license information
+                    });
+                //set up the xml documents for better readability in swagger
+                var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; //this also matches the file name set in the BUILD project setting xml document field
+                var fullPath = Path.Combine(AppContext.BaseDirectory, file);
+                options.IncludeXmlComments(fullPath);
+            });
             services.AddControllers();
         }
 
@@ -48,8 +72,16 @@ namespace Parky.api
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            //to view swagger documentation go to localhost:{port}/swagger/ParkyOpenAPISpec/swagger.json
+            app.UseSwagger(); //use after UseHttpRedirection - prevents anything from messing with the Http, use this to enable Swagger
 
+            //the swagger UI - localhost:{port}/swagger/index.html
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky API");
+                options.RoutePrefix = "";
+            });
+            app.UseRouting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
