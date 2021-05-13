@@ -26,3 +26,7 @@ After this the startup bootstrapper is modified to find the xml comment file usi
 
 XML COMMENT SUPPRESSION
 Explicitly in Build->Suppress Warnings added 1591 so that the missing xml comments aren't cluttering our warnings up
+
+TRAILS
+to add trails, we will add a new migration in nuget console  "add-migration addTrailsToDb"
+Then "update-database" to push

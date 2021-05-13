@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Parky.api</name>
+    </assembly>
+    <members>
+        <member name="M:Parky.api.Controllers.NationalParksController.GetAllNationalParks">
+            <summary>
+            Returns a list of all national parks
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parky.api.Controllers.NationalParksController.GetNationalPark(System.Int32)">
+            <summary>
+            Get a park by an ID
+            </summary>
+            <param name="id">The db ID of the national park</param>
+            <returns></returns>
+        </member>
+        <member name="M:Parky.api.Controllers.TrailsController.GetAllTrails">
+            <summary>
+            Returns a list of all Trails
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Parky.api.Controllers.TrailsController.GetTrail(System.Int32)">
+            <summary>
+            Get a trail by an ID
+            </summary>
+            <param name="id">The db ID of the trail</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
