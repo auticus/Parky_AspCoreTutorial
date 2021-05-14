@@ -7,8 +7,9 @@ using Parky.api.Repository.Interfaces;
 
 namespace Parky.api.Controllers
 {
-    [Route("api/Trails")]
+    [Route("api/v{version.apiVersion}/trails")]
     [ApiController]
+    //[ApiExplorerSettings(GroupName= "ParkyOpenAPISpecTrails")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //placing this here indicates that any of the methods below can generate this
     public class TrailsController : Controller
     {
@@ -48,6 +49,24 @@ namespace Parky.api.Controllers
             if (trail == null) return NotFound(); //returns a 404 NOT FOUND result
 
             return Ok(trail.ToDTO());
+        }
+
+        /// <summary>
+        /// Get a trail by an ID
+        /// </summary>
+        /// <param name="nationalParkId">The db ID of the park</param>
+        /// <returns></returns>
+        [HttpGet("GetTrailInNationalPark/{nationalParkId:int}", Name = "GetTrailsInNationalPark")]
+        [ProducesResponseType(200, Type = typeof(TrailDTO))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetTrailsInNationalPark(int nationalParkId)
+        {
+            var trails = _db.GetTrailsInPark(nationalParkId);
+            if (trails == null) return NotFound(); //returns a 404 NOT FOUND result
+
+            var trailDTOs = trails.Select(trail => trail.ToDTO()).ToList();
+            return Ok(trailDTOs);
         }
 
         [HttpPost]

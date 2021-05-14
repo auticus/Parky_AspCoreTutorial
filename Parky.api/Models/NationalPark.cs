@@ -17,6 +17,7 @@ namespace Parky.api.Models
 
         public DateTime Created { get; set; }
         public DateTime Established { get; set; }
+        public byte[] Picture { get; set; }
 
         public NationalParkDTO ToDTO()
         {

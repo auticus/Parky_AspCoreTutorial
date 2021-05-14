@@ -30,3 +30,9 @@ Explicitly in Build->Suppress Warnings added 1591 so that the missing xml commen
 TRAILS
 to add trails, we will add a new migration in nuget console  "add-migration addTrailsToDb"
 Then "update-database" to push
+
+Microsoft.AspNetCore.MvC.Versioning 
+Allows for versioning
+
+Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
+Allows for versioning

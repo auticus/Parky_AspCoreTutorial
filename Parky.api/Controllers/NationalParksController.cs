@@ -10,8 +10,10 @@ namespace Parky.api.Controllers
     //when launching this in Postman you can view the controller by going to https://localhost:{port}/api/nationalparks
     //this is because the controller is called NationalParksController, and the route is api/nationalparks (defined in the attribute)
     //this will hit the Get endpoint automatically... 
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/nationalparks")] //if a version is not defined it will be 1.0 (note it is not here)
     [ApiController]
+    //[ApiExplorerSettings(GroupName= "ParkyOpenAPISpecPark")] //helps swagger know that this controller belongs to this group
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //placing this here indicates that any of the methods below can generate this
     public class NationalParksController : Controller
     {
@@ -88,7 +90,14 @@ namespace Parky.api.Controllers
 
             //this returns a 201 Created response, and calls the GetNationalPark endpoint to retrieve the object
             //route name, route value, object value
-            return CreatedAtRoute("GetNationalPark", new {id = nationalPark.Id}, nationalPark);
+
+            //error below - when you add versioning and you try to CreatedAtRoute, you need to also pass in the version
+            //return CreatedAtRoute("GetNationalPark", new {id = nationalPark.Id}, nationalPark);
+            return CreatedAtRoute("GetNationalPark", new
+            {
+                version=HttpContext.GetRequestedApiVersion().ToString(),
+                id = nationalPark.Id
+            }, nationalPark);
         }
 
         //ex: https://localhost:{port}/api/nationalparks/1 - and set postman to PATCH

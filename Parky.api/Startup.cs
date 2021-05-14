@@ -12,11 +12,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Parky.api.Data;
 using Parky.api.Repository;
 using Parky.api.Repository.Interfaces;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Parky.api
 {
@@ -39,32 +42,44 @@ namespace Parky.api
 
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
-            services.AddSwaggerGen(options =>
+            services.AddApiVersioning(options =>
             {
-                options.SwaggerDoc("ParkyOpenAPISpec", 
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            });
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
+                /* - shows that you can have multiple areas of the document
+                options.SwaggerDoc("ParkyOpenAPISpecTrails",
                     new Microsoft.OpenApi.Models.OpenApiInfo()
                     {
-                        Title="Parky API",
-                        Version="1.0",
-                        Description="API Tutorial",
+                        Title = "Parky API Trails",
+                        Version = "1.0",
+                        Description = "API Tutorial",
                         Contact = new OpenApiContact()
+
                         {
-                            Email= "auticus.daerk@gmail.com",
-                            Name="Auticus Daerk",
+                            Email = "auticus.daerk@gmail.com",
+                            Name = "Auticus Daerk",
                             Url = new Uri("https://www.github.com/auticus")
                         }
                         //can get even more detailed here with extensions to add logos, etc... license information
                     });
+                
                 //set up the xml documents for better readability in swagger
                 var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; //this also matches the file name set in the BUILD project setting xml document field
                 var fullPath = Path.Combine(AppContext.BaseDirectory, file);
                 options.IncludeXmlComments(fullPath);
+                
             });
+                */
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -76,12 +91,21 @@ namespace Parky.api
             //to view swagger documentation go to localhost:{port}/swagger/ParkyOpenAPISpec/swagger.json
             app.UseSwagger(); //use after UseHttpRedirection - prevents anything from messing with the Http, use this to enable Swagger
 
-            //the swagger UI - localhost:{port}/swagger/index.html
+            app.UseSwaggerUI(options =>
+            {
+                foreach (var desc in provider.ApiVersionDescriptions)
+                    options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json", desc.GroupName.ToUpperInvariant());
+                options.RoutePrefix = string.Empty;
+            });
+            /*
+            //the swagger UI - localhost:{port}/swagger/index.html - this can be useful for one or more APIs
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "Parky API");
+                //options.SwaggerEndpoint("/swagger/ParkyOpenAPISpecTrails/swagger.json", "Parky API Trails");
                 options.RoutePrefix = "";
             });
+            */
             app.UseRouting();
             app.UseAuthorization();
 
