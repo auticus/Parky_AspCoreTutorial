@@ -33,7 +33,7 @@ namespace Parky.api
                     });
 
                 //set up the xml documents for better readability in swagger
-                var file = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; //this also matches the file name set in the BUILD project setting xml document field
+                var file = "ParkyAPI.xml"; //this also matches the file name set in the BUILD project setting xml document field
                 var fullPath = Path.Combine(AppContext.BaseDirectory, file);
                 options.IncludeXmlComments(fullPath);
             }

@@ -36,3 +36,20 @@ Allows for versioning
 
 Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
 Allows for versioning
+
+WEBSITE NUGET
+Microsoft.Aspnetcore.Razor.Runtime & Runtime.Compilation - Build-time and publish-time compilation of Razor files is enabled by default by the Razor SDK. 
+When enabled, runtime compilation complements build-time compilation, allowing Razor files to be updated if they're edited.
+
+WEB CSS and JS LINKS
+CSS: (goes at top of the _Layout.cshtml)
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+JS: (goes at bottom of _Layout.cshtml)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://kit.fontawesome.com/e19c476714.js"></script> 
