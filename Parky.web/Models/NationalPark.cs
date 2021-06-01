@@ -7,7 +7,7 @@ namespace Parky.web.Models
     {
         public int Id { get; set; }
 
-        [Required] 
+        [Required]
         public string Name { get; set; }
 
         [Required]

@@ -8,18 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Parky.web.Models;
 using Parky.web.Repository;
 
 namespace Parky.web
 {
     public class Startup
     {
-        private IWebHostEnvironment _env;
-
-        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -29,9 +27,8 @@ namespace Parky.web
         {
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
-            services.AddRazorPages()
-                .AddRazorRuntimeCompilation();
-            services.AddHttpClient(); //this was manually added to the project
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +40,10 @@ namespace Parky.web
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -57,7 +53,9 @@ namespace Parky.web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

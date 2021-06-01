@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Parky.web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Parky.web.Models;
 
 namespace Parky.web.Repository
 {
@@ -11,7 +11,7 @@ namespace Parky.web.Repository
     {
         public NationalParkRepository(IHttpClientFactory clientFactory) : base(clientFactory)
         {
-            
+
         }
     }
 }

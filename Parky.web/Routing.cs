@@ -1,4 +1,5 @@
-﻿namespace Parky.web
+﻿
+namespace Parky.web
 {
     public static class Routing
     {

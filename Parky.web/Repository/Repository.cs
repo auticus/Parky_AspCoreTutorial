@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,11 +7,10 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Parky.web.Repository
 {
-    public abstract class Repository<T> : IRepository<T> where T: class
+    public abstract class Repository<T> : IRepository<T> where T : class
     {
         protected readonly IHttpClientFactory ClientFactory;
 
@@ -80,7 +80,7 @@ namespace Parky.web.Repository
 
         public async Task<bool> DeleteAsync(string url, int id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, url+id);
+            var request = new HttpRequestMessage(HttpMethod.Post, url + id);
             var client = ClientFactory.CreateClient();
             var response = await client.SendAsync(request);
 
