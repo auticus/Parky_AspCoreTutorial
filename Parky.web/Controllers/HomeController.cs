@@ -6,21 +6,32 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Parky.web.Models.ViewModel;
+using Parky.web.Repository;
 
 namespace Parky.web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly INationalParkRepository _nationalParkRepo;
+        private readonly ITrailRepository _trailRepo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, INationalParkRepository nationalParkRepo, ITrailRepository trailRepo)
         {
             _logger = logger;
+            _nationalParkRepo = nationalParkRepo;
+            _trailRepo = trailRepo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var vm = new IndexViewModel()
+            {
+                NationalParks = await _nationalParkRepo.GetAllAsync(Routing.NationalParkRoute),
+                Trails = await _trailRepo.GetAllAsync(Routing.TrailsRoute)
+            };
+            return View(vm);
         }
 
         public IActionResult Privacy()
