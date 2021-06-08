@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Parky.api.Models.DTOs;
@@ -15,7 +16,7 @@ namespace Parky.api.Controllers
     [ApiController]
     //[ApiExplorerSettings(GroupName= "ParkyOpenAPISpecPark")] //helps swagger know that this controller belongs to this group
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //placing this here indicates that any of the methods below can generate this
-    public class NationalParksController : Controller
+    public class NationalParksController : ControllerBase
     {
         private readonly INationalParkRepository _db;
         
@@ -52,6 +53,7 @@ namespace Parky.api.Controllers
         [HttpGet("{id:int}", Name="GetNationalPark")]
         [ProducesResponseType(200, Type = typeof(NationalParkDTO))]
         [ProducesResponseType(404)]
+        [Authorize]
         [ProducesDefaultResponseType]
         public IActionResult GetNationalPark(int id)
         {

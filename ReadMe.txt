@@ -41,6 +41,9 @@ Allows for versioning
 Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
 Allows for versioning
 
+Microsoft.AspNetCore.Authentication.JwtBearer
+Allows for JWT Bearer authentication
+
 WEBSITE NUGET
 Microsoft.Aspnetcore.Razor.Runtime & Runtime.Compilation - Build-time and publish-time compilation of Razor files is enabled by default by the Razor SDK. 
 When enabled, runtime compilation complements build-time compilation, allowing Razor files to be updated if they're edited.

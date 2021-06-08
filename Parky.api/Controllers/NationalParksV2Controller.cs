@@ -15,7 +15,7 @@ namespace Parky.api.Controllers
     [ApiController]
     //[ApiExplorerSettings(GroupName= "ParkyOpenAPISpecPark")] //helps swagger know that this controller belongs to this group
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //placing this here indicates that any of the methods below can generate this
-    public class NationalParksV2Controller : Controller
+    public class NationalParksV2Controller : ControllerBase
     {
         private readonly INationalParkRepository _db;
         

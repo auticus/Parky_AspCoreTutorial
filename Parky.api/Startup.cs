@@ -11,10 +11,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Parky.api.Data;
 using Parky.api.Repository;
@@ -35,6 +38,7 @@ namespace Parky.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             //add the sql db context (using Entity framework here, so two nuget packages installed to allow for this to be used, EntityFrameworkCore and then the SqlServer extensions for Entity Framework)
             //the connection string can be found in the appsettings.json file
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,6 +46,7 @@ namespace Parky.api
 
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
             services.AddScoped<ITrailRepository, TrailRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -75,6 +80,29 @@ namespace Parky.api
                 
             });
                 */
+            var section = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(section);
+            var appSettings = section.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false, //in prod this should be true
+                        ValidateAudience = false //in prod this should be true
+                    };
+                });
+
             services.AddControllers();
         }
 
@@ -107,6 +135,13 @@ namespace Parky.api
             });
             */
             app.UseRouting();
+
+            //allow cross origin calls as our api and site have different urls
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            app.UseAuthentication(); //authenticate must come before authorize
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

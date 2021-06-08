@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Parky.api.Models.DTOs;
@@ -11,7 +12,7 @@ namespace Parky.api.Controllers
     [ApiController]
     //[ApiExplorerSettings(GroupName= "ParkyOpenAPISpecTrails")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)] //placing this here indicates that any of the methods below can generate this
-    public class TrailsController : Controller
+    public class TrailsController : ControllerBase
     {
         private readonly ITrailRepository _db;
         
@@ -43,6 +44,7 @@ namespace Parky.api.Controllers
         [ProducesResponseType(200, Type = typeof(TrailDTO))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
+        [Authorize(Roles="Admin")] //only admins can access this for whatever reason (demo purpose)
         public IActionResult GetTrail(int id)
         {
             var trail = _db.GetTrail(id);
