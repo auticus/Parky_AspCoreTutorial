@@ -1,0 +1,29 @@
+﻿<br />
+<div class="backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Trails</h2>
+        </div>
+        <div class="col-6 text-right">
+            <!-- the asp-controller here is optional since Index exists in the same controller it will know to use that controller-->
+            <a asp-action="Upsert" asp-controller="Trails" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Create New Trail</a>
+        </div>
+    </div>
+    <br />
+    <br />
+    <table id="tblData" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+            <tr>
+                <th>National Park</th>
+                <th>Trail Name</th>
+                <th>Distance</th>
+                <th>Elevation</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/trail.js"></script>
+}

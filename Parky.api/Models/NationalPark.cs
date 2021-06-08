@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Parky.api.Models.DTOs;
 
 namespace Parky.api.Models
@@ -7,6 +8,7 @@ namespace Parky.api.Models
     public class NationalPark
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]

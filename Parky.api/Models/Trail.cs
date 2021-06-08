@@ -11,6 +11,7 @@ namespace Parky.api.Models
     public class Trail
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -18,6 +19,9 @@ namespace Parky.api.Models
 
         [Required]
         public double Distance { get; set; }
+
+        [Required]
+        public double Elevation { get; set; }
 
         public enum DifficultyType
         {
@@ -30,9 +34,10 @@ namespace Parky.api.Models
         public DifficultyType Difficulty { get; set; }
 
         [Required]
+        [ForeignKey("NationalPark")]
         public int NationalParkId { get; set; }
 
-        [ForeignKey("Id")]
+        //[ForeignKey("Id")]
         public NationalPark NationalPark { get; set; }
 
         public DateTime DateCreated { get; set; }
@@ -45,6 +50,7 @@ namespace Parky.api.Models
                 Name = Name,
                 Distance = Distance,
                 Difficulty = Difficulty,
+                Elevation = Elevation,
                 NationalParkId = NationalParkId,
                 NationalPark = NationalPark.ToDTO()
             };

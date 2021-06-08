@@ -10,6 +10,9 @@ namespace Parky.api.Models.DTOs
         [Required]
         public double Distance { get; set; }
 
+        [Required]
+        public double Elevation { get; set; }
+
         public Trail.DifficultyType Difficulty { get; set; }
 
         [Required]
@@ -21,6 +24,7 @@ namespace Parky.api.Models.DTOs
             {
                 Name = Name,
                 Distance = Distance,
+                Elevation = Elevation,
                 Difficulty = Difficulty,
                 NationalParkId = NationalParkId
             };

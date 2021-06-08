@@ -51,7 +51,9 @@ namespace Parky.api.Migrations
             modelBuilder.Entity("Parky.api.Models.Trail", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -60,6 +62,9 @@ namespace Parky.api.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("Distance")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Elevation")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -71,6 +76,8 @@ namespace Parky.api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NationalParkId");
+
                     b.ToTable("Trails");
                 });
 
@@ -78,7 +85,7 @@ namespace Parky.api.Migrations
                 {
                     b.HasOne("Parky.api.Models.NationalPark", "NationalPark")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("NationalParkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

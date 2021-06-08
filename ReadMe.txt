@@ -6,6 +6,10 @@ This project utilizes a sql express database.  To do: dockerize this instance wi
 ---> this requires Microsoft.EntityFrameworkCore.Tools package to be installed from Nuget
 ---> this will create a Migrations folder in the solution which will create the tables needed (this is then moved into the Data folder for organization)
 
+IMPORTANT - when you have two or more projects, just running add-migration doesn't work.  you have to specify the project that the context resides in:
+add-migration whateverYourMigration -Project Parky.api
+same with "update-database" - you have to specify the project in the same way
+
 * - to update the database, ensure that the connection string in the appsettings.json file is correct and in the Package Manager Console run the command
 ---> "update-database"
 ---> this will create the schema structure in the sql server for the new database

@@ -32,6 +32,8 @@ namespace Parky.web.Controllers
 
         public async Task<IActionResult> Upsert(int? id)
         {
+            //this method appears to populate the view with an empty park (create new) or existing park
+            //not wild about the name since its not really DOING an upsert
             var park = new NationalPark();
 
             if (id == null) //inserts will have a null id

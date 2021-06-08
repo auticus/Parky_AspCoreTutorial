@@ -10,8 +10,8 @@ using Parky.api.Data;
 namespace Parky.api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210512044723_AddNationalParkToDb")]
-    partial class AddNationalParkToDb
+    [Migration("20210608165037_baseline")]
+    partial class baseline
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,6 +38,9 @@ namespace Parky.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -45,6 +48,50 @@ namespace Parky.api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NationalParks");
+                });
+
+            modelBuilder.Entity("Parky.api.Models.Trail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Elevation")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NationalParkId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NationalParkId");
+
+                    b.ToTable("Trails");
+                });
+
+            modelBuilder.Entity("Parky.api.Models.Trail", b =>
+                {
+                    b.HasOne("Parky.api.Models.NationalPark", "NationalPark")
+                        .WithMany()
+                        .HasForeignKey("NationalParkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NationalPark");
                 });
 #pragma warning restore 612, 618
         }
