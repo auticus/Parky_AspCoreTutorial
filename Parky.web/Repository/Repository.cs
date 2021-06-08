@@ -21,7 +21,7 @@ namespace Parky.web.Repository
 
         public async Task<T> GetAsync(string url, int id)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var request = new HttpRequestMessage(HttpMethod.Get, url + id); //failure to append id results in an array coming back
             var client = ClientFactory.CreateClient();
             var response = await client.SendAsync(request);
 
