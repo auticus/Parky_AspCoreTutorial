@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Parky.web.Models;
 using Parky.web.Repository;
@@ -14,6 +15,7 @@ namespace Parky.web.Controllers
     public class NationalParksController : Controller
     {
         private readonly INationalParkRepository _nationalParkRepository;
+        private const string TOKEN_NAME = "JWToken";
 
         public NationalParksController(INationalParkRepository nationalParkRepo)
         {
@@ -27,7 +29,7 @@ namespace Parky.web.Controllers
 
         public async Task<IActionResult> GetAllNationalPark()
         {
-            return Json(new {data = await _nationalParkRepository.GetAllAsync(Routing.NationalParkRoute)});
+            return Json(new {data = await _nationalParkRepository.GetAllAsync(Routing.NationalParkRoute, HttpContext.Session.GetString(TOKEN_NAME)) });
         }
 
         public async Task<IActionResult> Upsert(int? id)
@@ -41,7 +43,7 @@ namespace Parky.web.Controllers
                 return View(park);
             }
 
-            park = await _nationalParkRepository.GetAsync(Routing.NationalParkRoute, id.Value);
+            park = await _nationalParkRepository.GetAsync(Routing.NationalParkRoute, id.Value, HttpContext.Session.GetString(TOKEN_NAME));
             if (park == null)
             {
                 return NotFound();
@@ -69,17 +71,17 @@ namespace Parky.web.Controllers
                 }
                 else
                 {
-                    var dbPark = await _nationalParkRepository.GetAsync(Routing.NationalParkRoute, park.Id);
+                    var dbPark = await _nationalParkRepository.GetAsync(Routing.NationalParkRoute, park.Id, HttpContext.Session.GetString(TOKEN_NAME));
                     park.Picture = dbPark.Picture;
                 }
 
                 if (park.Id == 0)
                 {
-                    await _nationalParkRepository.CreateAsync(Routing.NationalParkRoute, park);
+                    await _nationalParkRepository.CreateAsync(Routing.NationalParkRoute, park, HttpContext.Session.GetString(TOKEN_NAME));
                 }
                 else
                 {
-                    await _nationalParkRepository.UpdateAsync(Routing.NationalParkRoute + park.Id, park); //expecting the id
+                    await _nationalParkRepository.UpdateAsync(Routing.NationalParkRoute + park.Id, park, HttpContext.Session.GetString(TOKEN_NAME)); //expecting the id
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -93,7 +95,7 @@ namespace Parky.web.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var status = await _nationalParkRepository.DeleteAsync(Routing.NationalParkRoute, id);
+            var status = await _nationalParkRepository.DeleteAsync(Routing.NationalParkRoute, id, HttpContext.Session.GetString(TOKEN_NAME));
             if (status)
             {
                 return Json(new {success = true, message = "Delete Successful"});

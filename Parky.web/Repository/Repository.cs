@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -19,10 +20,15 @@ namespace Parky.web.Repository
             ClientFactory = clientFactory;
         }
 
-        public async Task<T> GetAsync(string url, int id)
+        public async Task<T> GetAsync(string url, int id, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url + id); //failure to append id results in an array coming back
             var client = ClientFactory.CreateClient();
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             var response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -36,10 +42,15 @@ namespace Parky.web.Repository
             return null;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(string url)
+        public async Task<IEnumerable<T>> GetAllAsync(string url, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             var client = ClientFactory.CreateClient();
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             var response = await client.SendAsync(request);
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -54,34 +65,49 @@ namespace Parky.web.Repository
             return new List<T>();
         }
 
-        public async Task<bool> CreateAsync(string url, T dto)
+        public async Task<bool> CreateAsync(string url, T dto, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, url);
             if (dto == null) return false;
             request.Content = new StringContent(
                 JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+
             var client = ClientFactory.CreateClient();
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             var response = await client.SendAsync(request);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
 
-        public async Task<bool> UpdateAsync(string url, T dto)
+        public async Task<bool> UpdateAsync(string url, T dto, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Patch, url);
             if (dto == null) return false;
             request.Content = new StringContent(
                 JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
             var client = ClientFactory.CreateClient();
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             var response = await client.SendAsync(request);
 
             return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public async Task<bool> DeleteAsync(string url, int id)
+        public async Task<bool> DeleteAsync(string url, int id, string token)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, url + id);
             var client = ClientFactory.CreateClient();
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             var response = await client.SendAsync(request);
 
             return response.StatusCode == HttpStatusCode.NoContent;
